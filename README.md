@@ -1,4 +1,4 @@
 # golf-app
 
 
-This is my angular.js and phonegap sample code
+This is my angular.js , javascript, node.js, mongo and phonegap sample code
