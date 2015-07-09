@@ -1,0 +1,10 @@
+<div class='container-fluid' ng-controller="commentCtrl" style="margin:30px auto;width:320px;height:480px;">
+    <p>Comments:</p>
+    <form ng-submit="submitForm()">
+        <textarea class="form-control" rows="3" ng-maxlength="200" ng-model="sstorage.comment"></textarea>
+       <button id="submit" style="margin-top:10px;margin-left:65%;width:80px;height: 30px">Submit</button>
+    </form>
+
+
+{{message}}
+</div>

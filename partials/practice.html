@@ -1,0 +1,62 @@
+<div class='container-fluid' ng-controller="practiceCtrl" style="margin:0 auto;width:320px;height:480px;background-image: url('img/PracticeRound.png')">
+
+    <div style="width:310px;margin:0px auto;text-align:left">
+        <p style="margin-left:3px;padding-top:7px;font-size:100%;color: #adf30a" class="coursename">{{sstorage.RangeCourse | limitTo: 34}}</p>
+
+    </div>
+    <br/>
+    <br/>
+
+    <table style="margin: 6px auto 0 10px;width:300px">
+        <tr><td style="text-align:left;color:#ffffff;width:100px">
+
+        </td><td style="text-align:center;color:#ffffff;font-size:85%;width:100px">Shot {{strokesN}}</td>
+
+            <td ng-click="clubTypesShow()" style="text-align:center;color:#ffffff;font-size:85%;width:100px">{{sstorage.club}}</td>
+
+        </tr></table>
+
+    <table style="margin:6px auto;width:305px;"><tr><td style="text-align:left;width:30%"><button style="width:100px;height:30px;display:none">&nbsp;</button></td><td style="width:40%">&nbsp;</td>
+        <td style="text-align:right;width:30%" ng-click="nextShot();sstorage.strokes=sstorage.strokes + 1" ng-init="sstorage.strokes = 1"><img src="img/next_1.png" style="margin-top:0px;display:none" id="arrow" /></td></tr></table>
+    <p ></p>
+    <table id="ydss">
+        <tr><td style="text-align: right" id="s1">15</td><td style="text-align: right" id="s2" >30</td><td style="text-align: right" id="s3">45</td></tr>
+        <tr><td style="text-align: right" id="c1">YDS</td><td style="text-align: right" id="c2">YDS</td><td style="text-align: right" id="c3">YDS</td></tr>
+    </table>
+
+    <div ng-controller="CanvasCtrl">
+        <div  id="pop" ng-click="showForm()" style="display:none;margin-top:0px;width:60px;height:40px;text-align:center;font-size: 70%;position: absolute;background-color: #000000">
+
+            <p style="margin-top:6px"> {{shotPositionX}}&nbsp;{{sstorage.scalx}}<br />{{shotPositionY}}&nbsp;{{sstorage.scaly}}</p>
+
+        </div>
+        <form id="number" name="myForm" style="display:none;text-align: left">
+            <p style="margin-top:13px;margin-left:40px">Enter your number:</p>
+            <input type="number" ng-model="shotPositionX" style="width:30%;margin-left:60px"/>&nbsp;{{sstorage.scalx}}<br/><br/>
+            <input type="number" ng-model="shotPositionY" style="width:30%;margin-left:60px"/>&nbsp;{{sstorage.scaly}}<br/><br/>
+            <input type="submit" id="submit" value="Submit" style="margin-left:150px" ng-click="submit()"/>
+        </form>
+        <canvas id="canvas" width="320" height="250" style="margin-top:-10px;" ng-click="drawLines($event)"></canvas>
+        <div ng-click="saveShapeType()">
+            <table style="width:310px;margin:15px auto;"><tr>
+                <td style="text-align:left"><img ng-click="drawLeft($event)" style="margin-right:20px;opacity:0" src="img/bend2.png"/><img ng-click="drawLeft1($event)" style="opacity:0" src="img/bend2.png" /></td> <td style="text-align: center"><br/><span id="start" style="display:none;color:rgb(64,255,64)" ng-click="saveGpsOn()">GPS START</span><span>&nbsp;</span><span id="stop" ng-click="saveGpsOff()" style="display:none;color:#ff1a17">GPS STOP</span></td>
+                <td style="text-align:right"> <img ng-click="drawRight($event)" style="opacity:0" src="img/bend2.png"/><img ng-click="drawRight1($event)" style="margin-left:20px;opacity:0" src="img/bend2.png"/></td></tr></table>
+        </div>
+    </div>
+
+    <div style="margin-top:-210px;margin-left:147px;position:absolute;text-align: center;opacity:0">
+
+        <img src="img/cup.png" ng-click="showEnd()" />
+    </div>
+    <div id="endofRound" style="display:none">
+        <p style="margin-top:15px">End Practice? </p>
+        <button type="button" ng-click="goComs()"> Yes </button>
+        <button type="button" ng-click="noWay()" style="margin-left:30px"> No</button>
+    </div>
+    <div id="clubs">
+        <h4 style="padding-top:5px;margin-bottom: -5px">Select a Club</h4>
+        <label ng-repeat="club in lstorage.clubs | filter:true" for = "{{club.value}}"><input type="radio" ng-model="sstorage.club" id="{{club.value}}" ng-change="hideClubs()" name="club" ng-value="club.value">&nbsp;{{club.value}}</label>
+
+    </div>
+
+</div>

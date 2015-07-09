@@ -1,0 +1,95 @@
+<div class='container-fluid' ng-controller="TeeCtrl" id="displaypage" style="margin:0 auto;width:320px;height:480px;background-image: url('img/MainScreen_15yds_320.png')">
+
+    <div style="width:310px;margin:0px auto;text-align:left">
+        <p style="margin-left:3px;padding-top:7px;font-size:100%;color: #adf30a" class="coursename">{{sstorage.Course | limitTo: 34}}</p>
+        <p style="font-size:100%;margin-left:18px;padding-top:7px;">Hole {{hole}}</p>
+    </div>
+    <table style="margin: -7px auto 0 10px;width:305px">
+        <tr><td style="text-align:left;color:#ffffff;width:75px">
+            <p>
+                <span style="font-size:85%;display:block">Par {{par}}</span>
+                <span style="font-size:85%">{{yards}} Yards</span></p>
+        </td><td style="text-align:right;color:#ffffff;font-size:85%;width:50px">Shot {{shot}}</td>
+            <td style="text-align:center;color:#ffffff;font-size:85%;width:60px">{{displayToPar()}}</td>
+            <td ng-click="clubTypesShow()" style="text-align:center;color:#ffffff;font-size:85%;width:50px">{{sstorage.club}}</td>
+
+            <td ng-click="shotTypesShow()" style="text-align:center;color:#ffffff;width:70px;font-size:85%;">
+             {{shotType}}
+            </td>
+        </tr></table>
+
+    <table style="margin:-5px auto 0 auto;width:305px;"><tr><td style="text-align:left;width:30%"><button style="width:100px;height:30px;opacity:0" ng-click="prevShot()" ng-disabled="shot <= 1">Pre</button></td><td style="width:40%">&nbsp;</td>
+        <td style="text-align:right;width:30%" ng-click="nextShot();"><img src="img/next_1.png" style="margin-top:0px;display:none" id="arrow" ng-click="sstorage.strokes = sstorage.strokes + 1" ng-init="sstorage.strokes = 1"/></td></tr></table>
+    <p ></p>
+
+    <div ng-controller="CanvasCtrl">
+        <div  id="pop" style="display:none;margin-top:-5px;width:60px;height:40px;text-align:center;font-size: 70%;position: absolute;background-color: #000000" ng-click="showForm()">
+
+            <p style="margin-top:6px"> {{shotPositionX}}&nbsp;{{sstorage.scalx}}<br />{{shotPositionY}}&nbsp;{{sstorage.scaly}}</p>
+
+        </div>
+        <form id="number" name="myForm" style="display:none;text-align: left">
+            <p style="margin-top:13px;margin-left:40px">Enter your number:</p>
+            <input type="number" ng-model="shotPositionX" style="width:30%;margin-left:60px"/>&nbsp;{{sstorage.scalx}}<br/><br/>
+            <input type="number" ng-model="shotPositionY" style="width:30%;margin-left:60px"/>&nbsp;{{sstorage.scaly}}<br/><br/>
+            <input type="submit" id="submit" value="Submit" style="margin-left:150px" ng-click="submit()"/>
+        </form>
+        <canvas id="canvas" width="320" height="250" style="margin-top:-10px;" ng-click="drawLines($event)"></canvas>
+        <div ng-click="saveShapeType()">
+        <table style="width:310px;margin:15px auto;"><tr>
+            <td style="text-align:left"><img ng-click="drawLeft($event)" style="margin-right:20px;opacity:0" src="img/bend2.png"/><img ng-click="drawLeft1($event)" style="opacity:0" src="img/bend2.png" /></td> <td style="text-align: center"><br/><span id="start" style="display:none;color:rgb(64,255,64)" ng-click="saveGpsOn()">GPS START</span><span>&nbsp;</span><span id="stop" ng-click="saveGpsOff()" style="display:none;color:#ff1a17">GPS STOP</span></td>
+            <td style="text-align:right"> <img ng-click="drawRight($event)" style="opacity:0" src="img/bend2.png"/><img ng-click="drawRight1($event)" style="margin-left:20px;opacity:0" src="img/bend2.png"/></td></tr></table>
+         </div>
+</div>
+    <div style="margin-top:-220px;margin-left:147px;position:absolute;text-align: center;opacity:0">
+
+        <img src="img/cup.png" ng-click="showHoleOut()" />
+    </div>
+        <div style="display:none;" id="dist">
+            <p style="margin-top:35px">Distance: {{distance}} Yards</p>
+        </div>
+    <div style="display:none;" id="holeOut">
+        <p style="margin-top:10px">Hole out -</p> <button style="margin-right:20px" ng-click="nextHole()" >Yes</button> or <button style="margin-left:20px" ng-click="thisHole()">No</button><br/><br/>
+        <button style="margin-bottom:0px" ng-click="goThere()">End Round</button>
+    </div>
+    <div id="endofRound" style="display:none">
+        <p style="margin-top:15px">End Round? </p>
+        <button type="button" ng-click="goCom()"> Yes </button>
+        <button type="button" ng-click="noWay()" style="margin-left:30px"> No</button>
+    </div>
+    <!-- in fairway -->
+    <div id="fairway" style="display:none">
+        <p style="margin-top:20px">On Fairway? </p>
+        <label style="margin-right:30px"><input type="radio" ng-model="shotType" value="Approach" ng-click="inFairway();showApp();sstorage.fairways = sstorage.fairways + 1" /> Yes </label>
+        <label><input type="radio" ng-model="shotType" value="Approach" ng-click="inFairway();showApp();sstorage.fairways = sstorage.fairways + 1"/> No </label>
+    </div>
+   <p style="display:none">{{onFairway}}</p>
+    <!-- on Green -->
+
+    <form id="green" style="display:none">
+        <p style="margin-top:20px">On Green? </p>
+        <label style="margin-right:30px"><input type="radio" ng-model="shotType" value="Putt" ng-click="inGreen();showPut();sstorage.greens = sstorage.greens + 1" ng-init="sstorage.greens = 0"/> Yes </label>
+        <label ng-click="notOnGreen()"><input type="radio" ng-model="shotType" ng-click="notOnGreen()" /> No </label>
+    </form>
+    <p style="display:none">{{greenPot}}</p>
+
+    <div id="clubs">
+        <h4 style="padding-top:5px;margin-bottom: -5px">Select a Club</h4>
+        <label ng-repeat="club in lstorage.clubs | filter:true" for = "{{club.value}}"><input type="radio" ng-model="sstorage.club" id="{{club.value}}" ng-change="hideClubs()" name="club" ng-value="club.value">&nbsp;{{club.value}}</label>
+
+    </div>
+
+
+<div id="shots" style="display:none">
+
+    <h4>Select a Shot Type</h4>
+         <label><input type="radio" ng-click="shotTypesHide();showDri()" ng-model="shotType" value="Drive"> Drive</label><br/>
+         <label><input type="radio" ng-click="shotTypesHide();showApp();sstorage.fairways = sstorage.fairways + 1" ng-model="shotType" value="Approach"> Approach</label><br/>
+         <label><input type="radio" ng-click="shotTypesHide();showPit()" ng-model="shotType" value="Pitch"> Pitch</label><br/>
+         <label><input type="radio" ng-click="shotTypesHide();showBun()" ng-model="shotType" value="Chip"> Chip</label><br/>
+         <label><input type="radio" ng-click="shotTypesHide();showBun()" ng-model="shotType" value="Bunker"> Bunker</label><br/>
+         <label><input type="radio" ng-click="showPut();sstorage.putts = sstorage.putts + 1" ng-init="sstorage.putts = 0" ng-model="shotType" value="Putt"> Putt</label><br/>
+         <label><input type="radio" ng-click="shotTypesHide();shot = shot + 1" ng-model="shotType" value="Penalty"> Penalty</label>
+
+</div>
+</div>
